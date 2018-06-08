@@ -1,0 +1,11 @@
+---
+- hosts: all
+  remote_user: root
+  vars:
+###create password using###openssl passwd -1 -salt $(openssl rand -base64 6) root@123
+    root_pass: $1$nOUQixvK$UPq.fBgPkEpNXQr5MnxYv/
+
+  tasks:
+
+    - name: root password change
+      user: name=root update_password=always password="{{ root_pass }}"
