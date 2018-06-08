@@ -1,0 +1,16 @@
+---
+- hosts: all
+  tasks:
+        - name: Install nrpe & epel
+          yum: name={{item}} state=latest
+          with_items:
+                - epel-release
+                - nagios-plugins-all
+        - name: write the nrpe config file
+          copy: src=/etc/ansible/nrpe.conf dest=/etc/nagios/nrpe.conf
+          notify:
+            - start nrpe
+
+          handlers:
+        - name: start nrpe
+          service: name=nrpe state=started
