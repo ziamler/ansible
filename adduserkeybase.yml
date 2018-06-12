@@ -1,0 +1,12 @@
+---
+- hosts: all
+  tasks:
+    - user: name=khushal state=present
+    - authorized_key: user=khushal key="{{lookup('file', '/etc/ansible/auth_key_store/khushal/id_rsa.pub') }}"
+    - lineinfile:
+            dest: /etc/sudoers
+            line: "{{ item }}"
+      with_items:
+           - "Defaults:khushal !requiretty"
+           - "khushal ALL=(ALL)         NOPASSWD: LOG_INPUT: LOG_OUTPUT: ALL"
+           - "Defaults logfile=/var/log/sudolog"
