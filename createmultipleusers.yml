@@ -1,20 +1,22 @@
 ---
-- hosts: all #modify your server list
+- hosts: all
   remote_user: root
 
   tasks:
   - include_vars: users.yml
   - name: Creating users to Jump Server
-    user: name="{{item.username}}"
+    user: name="{{ item.username }}"
     with_items: "{{ users }}"
 
   - name: Placing SSH Key to Authorized Key
-  #please note that this code assumes as if the public-private key pair is generated, all public users (created above) have public keys copied at one place i.e. keyfiles directory for the ease
-    authorized_key: user="{{item.username}}" key="{{ lookup('file', '/etc/ansible/auth_key_store/khushal/authorized_keys.{{ item.username }}.pub')}}"
+   authorized_key: user="{{ item.username }}" key="{{ lookup('file', '/etc/ansible/auth_key_store/khushal/authorized_keys.{{ item.username  }}.pub')}}"
     with_items: "{{ users }}"
   - lineinfile:
-            path: /etc/sudoers
-            state: present
-            regexp: '^%wheel\s'
-            line: 'khushal ALL=(ALL) NOPASSWD: ALL'
+            dest: '/etc/sudoers'
+            state: 'present'
+            regexp: '^%wheel\s '
+            insertafter: '^%wheel '
+            line: '%{{ item.username }} ALL=(ALL) NOPASSWD: ALL'
+            validate: 'visudo -cf %s'
+    with_items: "{{ users }}"
 
