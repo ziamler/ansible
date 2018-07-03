@@ -1,0 +1,18 @@
+---
+- hosts: all
+  vars:
+    userhomedir: /root/.ssh
+  tasks:
+  - name: copy key
+    lineinfile:
+        dest: /root/.ssh/authorized_keys
+        state: present
+        create: yes
+        backup: True
+        line: 'ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAyUgM1iWnOHkR8mwM1SuYxVGeqsMr1xehkf/ZtSQRrUopE9LXNQSqjaG1rz3XWOeSp6OxWC9dz4P7fc2PoA+S9Q8nuwmBh6UE6aBGWTOmh3vFM1xSLCCZtpdfLP0gjusNS7bqp2PRDRTQNtwnsyji1z3cXNXB54PwSWQHDg2/TW44Xt9Bpbz0zF9m7D5IBxLRpyBkM+h84+Y0Bm//P5PdSW8flBUKM4Pmrwcqgkx7cgFfWg47Ipy0fG1e3erzaBaCIfn5jIannWtOWayPdcSKFL7GtESqBuDyVzvb2wxCimdfFMpZMHv605gET7/zxfq0nguLOGyjPVo7Dr6g9BVesQ== khushal1@stestserver.com'
+  - name: override key
+    copy:
+        content: 'ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAyUgM1iWnOHkR8mwM1SuYxVGeqsMr1xehkf/ZtSQRrUopE9LXNQSqjaG1rz3XWOeSp6OxWC9dz4P7fc2PoA+S9Q8nuwmBh6UE6aBGWTOmh3vFM1xSLCCZtpdfLP0gjusNS7bqp2PRDRTQNtwnsyji1z3cXNXB54PwSWQHDg2/TW44Xt9Bpbz0zF9m7D5IBxLRpyBkM+h84+Y0Bm//P5PdSW8flBUKM4Pmrwcqgkx7cgFfWg47Ipy0fG1e3erzaBaCIfn5jIannWtOWayPdcSKFL7GtESqBuDyVzvb2wxCimdfFMpZMHv605gET7/zxfq0nguLOGyjPVo7Dr6g9BVesQ== khushal1@stestserver.com'
+        dest: /root/.ssh/id_rsa
+        backup: yes
+        mode: 0600
