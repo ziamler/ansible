@@ -1,0 +1,7 @@
+---
+- hosts: web
+  remote_user: root
+  gather_facts: no
+  tasks:
+  - hostname:
+        name: "web{{ play_hosts.index(inventory_hostname)+100 }}"
