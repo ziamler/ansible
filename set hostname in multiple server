@@ -5,3 +5,5 @@
   tasks:
   - hostname:
         name: "web{{ play_hosts.index(inventory_hostname)+100 }}"
+  - name: template test
+    action: template src=files/hosts.j2 dest=/etc/hosts
