@@ -4,6 +4,10 @@
   gather_facts: no
   tasks:
   - hostname:
-        name: "web{{ play_hosts.index(inventory_hostname)+100 }}"
-  - name: template test
-    action: template src=files/hosts.j2 dest=/etc/hosts
+       name: "web{{ play_hosts.index(inventory_hostname)+01 }}"
+ # - name: template test
+ #   action: template src=files/hosts.j2 dest=/etc/hosts
+  - name: "Build hosts file"
+  lineinfile: dest=/etc/hosts
+              state=present
+              line="{{ ansible_default_ipv4.address }} khushal{{ play_hosts.index(inventory_hostname)+021 }}"
