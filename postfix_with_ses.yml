@@ -1,0 +1,39 @@
+- hosts: postfix
+  remote_user: ansible
+  become: yes
+  tasks:
+  - name: install the latest version of postfix and mailx
+    yum:
+     name: "{{ packages }}"
+    vars:
+      packages:
+      - postfix
+      - mailx
+
+  - name: copy file to remote host
+    copy:
+     src: /data/devops/ansible/postfix-files/ca-bundle.crt
+     dest: /etc/ssl/certs/
+     mode: 0644
+     backup: yes
+  - name: display content of all check_ files in dir
+    debug: msg={{lookup('fileglob', '/data/devops/ansible/postfix-files')}}
+
+  - name: copy files to remote host
+    copy:
+      src: "{{ item }}"
+      dest: /etc/postfix/
+      owner: root
+      group: root
+      mode: 0644
+      backup: yes
+    with_fileglob:
+      - "/data/devops/ansible/postfix-files/*"
+  
+  - name: execute command
+    shell: sudo postmap hash:/etc/postfix/sasl_passwd
+    
+  - name: restarted postfix
+    service:
+     name: postfix
+     state: restarted
